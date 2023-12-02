@@ -1,0 +1,2 @@
+
+        newWord += text[j]

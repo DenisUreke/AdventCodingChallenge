@@ -1,6 +1,5 @@
 import re
-
-file_path = 'C:/Users/ureke/Desktop/myfile.txt'
+file_path = 'AdventText01.txt'
 
 # Open the file and read it line by line
 
@@ -33,4 +32,4 @@ def readList():
         print("File not found")
         
 
-#readList()
+readList()

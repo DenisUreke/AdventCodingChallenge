@@ -1,4 +1,5 @@
 import re
+file_path = 'AdventText01.txt'
 
 def extractNumbersFromString(text : str):
     empty_list = []
