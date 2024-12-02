@@ -1,4 +1,4 @@
-import re
+
 file_path = 'AdventText01.txt'
 
 # Open the file and read it line by line

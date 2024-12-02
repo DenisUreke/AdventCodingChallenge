@@ -1,7 +1,6 @@
 '''ownerproof-4438009-1733095176-e04c08a55037'''
 
-import re
-file_path = 'Adventure01_2024.txt'
+file_path = 'Advent01_2024.txt'
 
 list_a = []
 list_b = []
