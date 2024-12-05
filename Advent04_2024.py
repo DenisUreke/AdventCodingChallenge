@@ -26,32 +26,6 @@ def read_file():
                 column_x.append(new_letter)
             row_y.append(column_x)
 
-def adjust_list_horisontal(y, x):
-
-    column = x
-    while (column < x + 4):
-        row_y[y][column].is_used = True
-        column += 1
-
-def check_if_on_is_unused(y, x):
-
-    column = x
-    while (column < x + 4):
-        if not row_y[y][column].is_used:
-            return True
-        column += 1
-
-    return False
-    
-
-def check_if_xmas(buffer, y, x):
-    global found
-
-    if buffer == "XMAS" or buffer == "SAMX":
-        if(check_if_on_is_unused(y, x)):
-            found += 1
-            adjust_list_horisontal(y,x)
-
 def check_if_atleast_one_letter_is_unused(list):
     
     for object in list:
@@ -94,23 +68,98 @@ def check_vertical():
 
 
 def check_horisontal():
-    buffer = ""
+    buffer = Buffer() 
     y = 0
 
     while y < len(row_y):
         x = 0
+        buffer.buffer = ""
+        buffer.letters_and_boolean = []
         while x < len(row_y[y]):
-            buffer += row_y[y][x].letter
-            if len(buffer) == 4:
-                check_if_xmas(buffer=buffer, y=y, x=x - 3)
-                buffer = ""
+            buffer.buffer += row_y[y][x].letter
+            coordinates = (y, x, row_y[y][x].is_used)
+            buffer.letters_and_boolean.append(coordinates)
+            if len(buffer.buffer) == 4:
+                check_if_christmas(buffer=buffer)
+                buffer.buffer = ""
+                buffer.letters_and_boolean = []
             x += 1
         y += 1
+
+def check_diagonal_top_left_right_down():
+    buffer = Buffer()
+    for start_row in range(len(row_y)):
+        x, y = 0, start_row
+        buffer.buffer = ""
+        buffer.letters_and_boolean = []
+        while x < len(row_y[0]) and y < len(row_y):
+            buffer.buffer += row_y[y][x].letter
+            coordinates = (y, x, row_y[y][x].is_used)
+            buffer.letters_and_boolean.append(coordinates)
+            if len(buffer.buffer) == 4:
+                check_if_christmas(buffer=buffer)
+                buffer.buffer = ""
+                buffer.letters_and_boolean = []
+            x += 1
+            y += 1
+
+    for start_col in range(1, len(row_y[0])):
+        x, y = start_col, 0
+        buffer.buffer = ""
+        buffer.letters_and_boolean = []
+        while x < len(row_y[0]) and y < len(row_y):
+            buffer.buffer += row_y[y][x].letter
+            coordinates = (y, x, row_y[y][x].is_used)
+            buffer.letters_and_boolean.append(coordinates)
+            if len(buffer.buffer) == 4:
+                check_if_christmas(buffer=buffer)
+                buffer.buffer = ""
+                buffer.letters_and_boolean = []
+            x += 1
+            y += 1
+
+def check_diagonal_top_right_left_down():
+    buffer = Buffer()
+    for start_row in range(len(row_y)):
+        x, y = len(row_y[0]) - 1, start_row
+        buffer.buffer = ""
+        buffer.letters_and_boolean = []
+        while x >= 0 and y < len(row_y):
+            buffer.buffer += row_y[y][x].letter
+            coordinates = (y, x, row_y[y][x].is_used)
+            buffer.letters_and_boolean.append(coordinates)
+            if len(buffer.buffer) == 4:
+                check_if_christmas(buffer=buffer)
+                buffer.buffer = ""
+                buffer.letters_and_boolean = []
+            x -= 1
+            y += 1
+
+    for start_col in range(len(row_y[0]) - 2, -1, -1):
+        x, y = start_col, 0
+        buffer.buffer = ""
+        buffer.letters_and_boolean = []
+        while x >= 0 and y < len(row_y):
+            buffer.buffer += row_y[y][x].letter
+            coordinates = (y, x, row_y[y][x].is_used)
+            buffer.letters_and_boolean.append(coordinates)
+            if len(buffer.buffer) == 4:
+                check_if_christmas(buffer=buffer)
+                buffer.buffer = ""
+                buffer.letters_and_boolean = []
+            x -= 1
+            y += 1
+
+def check_diagonal_top_left_right_down():
+    buffer = Buffer()
+    y = 0
 
 def start():
     read_file()
     check_horisontal()
-    #check_vertical()
+    check_vertical()
+    check_diagonal_top_left_right_down()
+    check_diagonal_top_right_left_down()
     print(found)
 
 start()
