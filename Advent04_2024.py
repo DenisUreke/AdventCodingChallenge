@@ -42,7 +42,9 @@ def adjust_the_list(in_list):
 def check_if_christmas(buffer):
     global found
 
-    if buffer.buffer == "XMAS" or buffer.buffer == "SAMX":
+    word = buffer.buffer
+    valid_words = ["XMAS", "SAMX"]
+    if word in valid_words:
         if check_if_atleast_one_letter_is_unused(buffer.letters_and_boolean):
             found += 1
             adjust_the_list(buffer.letters_and_boolean)
@@ -61,8 +63,8 @@ def check_vertical():
             buffer.letters_and_boolean.append(coordinates)
             if len(buffer.buffer) == 4:
                 check_if_christmas(buffer=buffer)
-                buffer.buffer = ""
-                buffer.letters_and_boolean = []
+                buffer.buffer = buffer.buffer[1:]
+                buffer.letters_and_boolean.pop(0)
             y += 1
         x += 1
 
@@ -81,8 +83,8 @@ def check_horisontal():
             buffer.letters_and_boolean.append(coordinates)
             if len(buffer.buffer) == 4:
                 check_if_christmas(buffer=buffer)
-                buffer.buffer = ""
-                buffer.letters_and_boolean = []
+                buffer.buffer = buffer.buffer[1:]
+                buffer.letters_and_boolean.pop(0)
             x += 1
         y += 1
 
@@ -98,8 +100,8 @@ def check_diagonal_top_left_right_down():
             buffer.letters_and_boolean.append(coordinates)
             if len(buffer.buffer) == 4:
                 check_if_christmas(buffer=buffer)
-                buffer.buffer = ""
-                buffer.letters_and_boolean = []
+                buffer.buffer = buffer.buffer[1:]
+                buffer.letters_and_boolean.pop(0)
             x += 1
             y += 1
 
@@ -113,8 +115,8 @@ def check_diagonal_top_left_right_down():
             buffer.letters_and_boolean.append(coordinates)
             if len(buffer.buffer) == 4:
                 check_if_christmas(buffer=buffer)
-                buffer.buffer = ""
-                buffer.letters_and_boolean = []
+                buffer.buffer = buffer.buffer[1:]
+                buffer.letters_and_boolean.pop(0)
             x += 1
             y += 1
 
@@ -130,8 +132,8 @@ def check_diagonal_top_right_left_down():
             buffer.letters_and_boolean.append(coordinates)
             if len(buffer.buffer) == 4:
                 check_if_christmas(buffer=buffer)
-                buffer.buffer = ""
-                buffer.letters_and_boolean = []
+                buffer.buffer = buffer.buffer[1:]
+                buffer.letters_and_boolean.pop(0)
             x -= 1
             y += 1
 
@@ -145,8 +147,8 @@ def check_diagonal_top_right_left_down():
             buffer.letters_and_boolean.append(coordinates)
             if len(buffer.buffer) == 4:
                 check_if_christmas(buffer=buffer)
-                buffer.buffer = ""
-                buffer.letters_and_boolean = []
+                buffer.buffer = buffer.buffer[1:]
+                buffer.letters_and_boolean.pop(0)
             x -= 1
             y += 1
 
