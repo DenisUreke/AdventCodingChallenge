@@ -26,7 +26,7 @@ class Node():
         self.in_degree -= 1
 
 ## make sure None is returned instead of Error if value doesnt exist
-nodes = defaultdict(lambda: None)
+'''nodes = defaultdict(lambda: None)
 
 def create_look_up_list():
 
@@ -69,9 +69,11 @@ def topological_sort():
 
 def start1():
     create_look_up_list()
-    topological_sort()
+    topological_sort()'''
 
 #start()
+
+###############################################################################
 
 def read_rules():
     rules_list = defaultdict(list)
@@ -110,26 +112,99 @@ def find_mid_number(current_row):
 
 def compare_list_against_rules(numbers, rules_list):
     count = 0
+    errors_list = []
 
     for row in numbers:
         passed = True
         for i in range(len(row)):
+            if not passed:
+                break
             current_number = row[i]
             for y in range(i, len(row)):
                 if row[y] in rules_list[current_number]:
+                    errors_list.append(row)
                     passed = False
                     break
         if passed:
-            print(row)
             count += find_mid_number(row)
 
-    return count
+    return count, errors_list
+
+def topological_sort(nodes):
+
+    queue = deque()
+    topological_order = []
+
+    ## .items() is the keyvalue for defaultdict
+    for node_number, node in nodes.items():
+        if node is not None and node.in_degree == 0:
+            queue.append(node_number)
+
+    while(queue):
+        current = queue.popleft()
+        topological_order.append(current)
+
+        for dependant in nodes[current].dependants:
+            nodes[dependant].remove_dependancy()
+
+            if nodes[dependant].in_degree == 0:
+                queue.append(dependant)
+
+    # Check for cycles
+    if len(topological_order) != len([node for node in nodes.values() if node is not None]):
+        raise ValueError("Cycle detected! Topological sorting is not possible.")
+    
+    return topological_order
+
+def create_topological_list_for_errors(rules_list, error_list):
+    #if is in list that is sent in and in the dependencies list then we know
+
+    nodes = defaultdict(Node)
+
+    for entry in error_list:
+        for value in entry:
+            if value not in nodes:
+                nodes[value] = Node(value)
+            
+            dependants = rules_list[value]
+
+            for dependant in dependants:
+                if dependant in entry:
+
+                    if dependant not in nodes:
+                        nodes[dependant] = Node(dependant)
+
+                        nodes[value].add_dependancy(dependant)
+                        nodes[dependant].add_dependant_to_this_node(value)
+
+    return nodes
+
+def sort_by_predefined_order(predefined_order, input_list):
+
+    order_mapping = {number: index for index, number in enumerate(predefined_order)}
+    return sorted(input_list, key=lambda x: order_mapping.get(x, float('inf')))
+
 
 def start():
+    the_value = 0
     rules = read_rules()
     list = read_list()
-    count = compare_list_against_rules(list, rules)
-    print(count)
+    count, errors_list = compare_list_against_rules(list, rules)
+    nodes = create_topological_list_for_errors(rules, errors_list)
+    order = topological_sort(nodes)
+    sorted_list = [sort_by_predefined_order(order, entry) for entry in errors_list]
+    
+    for entry in sorted_list:
+        mid_number = find_mid_number(entry)
+        print(f"Middle Number for {entry}: {mid_number}")
+        the_value += mid_number
+        print(f"Updated Count: {count}")
+        
+    print(the_value)
+
+
+    #for idx, entry in enumerate(sorted_list):
+        #print(f"Sorted Entry {idx + 1}: {entry}")
 
 start()
             
